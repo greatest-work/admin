@@ -4,9 +4,10 @@
 
 
 <script>
-import { inject, reactive } from 'vue' 
+import { inject, reactive } from 'vue';
 export default {
     name: 'site-list',
+
     setup() {
         const api = inject('api');
         const listInfo = reactive({
@@ -14,7 +15,7 @@ export default {
             total: 0
         })
         const getSiteList = async () => {
-            const {result, total} = await api.getSiteList()
+            const {result, total} = await api.getArticlesList()
             listInfo.result = result;
             listInfo.total = total;
         }
@@ -22,8 +23,6 @@ export default {
         return {
             listInfo
         }
-        // const api = inject('api');
-        // console.log(await api.getSiteList());
     }
 }
 </script>

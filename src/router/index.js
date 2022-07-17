@@ -6,11 +6,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 const SiteDetails = () => import('@/views/site/details');
 const SiteList = () => import('@/views/site/list');
 
+const Dashboard = () => import('@/views/dashboard');
 
 const routes = [
     {
         path:'/',
-        redirect:'/site/list'  // 重定向
+        component: Dashboard
     },
     {
         path: '/login',
@@ -25,7 +26,7 @@ const routes = [
                 component: SiteList,
             },
             {
-                path: 'deatils/:id',
+                path: 'deatils',
                 component: SiteDetails,
             },
         ],

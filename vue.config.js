@@ -1,14 +1,12 @@
-const { defineConfig } = require('@vue/cli-service')
+const { defineConfig } = require('@vue/cli-service');
 const path = require("path");
+
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
+
 module.exports = defineConfig({
   transpileDependencies: true,
-  // output: {
-  //   filename: '[name].bundle.js',
-  //   path: path.resolve(__dirname, 'dist'),
-  // },
   devServer: {
     open: true,
     host: 'localhost',
