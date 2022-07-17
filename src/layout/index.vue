@@ -1,5 +1,5 @@
 <template>
-  <a-layout class="layout">
+  <a-layout v-if="!hidden" class="layout">
     <a-layout-sider hide-trigger collapsible :collapsed="collapsed">
       <div class="logo" />
       <NavMenu />
@@ -23,11 +23,15 @@
       </a-layout>
     </a-layout>
   </a-layout>
+  <div v-else>
+    <router-view />
+  </div>
 </template>
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { Message } from "@arco-design/web-vue";
 import NavMenu from "@/components/nav-menu.vue";
+import { useRoute } from "vue-router";
 import { IconCaretRight, IconCaretLeft } from "@arco-design/web-vue/es/icon";
 
 export default defineComponent({
@@ -38,13 +42,23 @@ export default defineComponent({
     IconCaretLeft
   },
   setup() {
+    const route = useRoute();
     const collapsed = ref(false);
+    const hidden = ref(true);
+
+    watch(
+      () => route.meta,
+      val => hidden.value = val.hidden
+    );
+
+
     const onCollapse = () => {
       collapsed.value = !collapsed.value;
     };
     return {
       collapsed,
       onCollapse,
+      hidden,
       onClickMenuItem(key) {
         Message.info({ content: `You select ${key}`, showIcon: true });
       },

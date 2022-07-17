@@ -4,29 +4,13 @@
   </div>
 </template>
 <script>
-// import { Message } from '@arco-design/web-vue';
-// import {
-//   IconApps,
-//   IconBug,
-//   IconBulb,
-// } from '@arco-design/web-vue/es/icon';
 
 export default {
   name: 'site-details',
-//   components: {
-//     IconApps,
-//     IconBug,
-//     IconBulb,
-//   },
+
   setup() {
     return {
-    //   onCollapse(val, type) {
-    //     // const content = type === 'responsive' ? '触发响应式收缩' : '点击触发收缩';
-    //     // Message.info({
-    //     //   content,
-    //     //   duration: 2000,
-    //     // });
-    //   }
+
     };
   }
 };
