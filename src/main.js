@@ -4,5 +4,10 @@ import router from '@/router';
 import api from '@/apis';
 import ArcoVue from '@arco-design/web-vue';
 import '@arco-design/web-vue/dist/arco.css';
-
-createApp(App).use(router).use(ArcoVue).provide('api', api).mount('#app')
+import ArcoVueIcon from '@arco-design/web-vue/es/icon';
+createApp(App)
+    .use(router)
+    .use(ArcoVue)
+    .use(ArcoVueIcon)
+    .provide('api', api)
+    .mount('#app')
