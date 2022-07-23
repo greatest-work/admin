@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkadmin"]=self["webpackChunkadmin"]||[]).push([[360],{5360:function(n,e,r){r.r(e),r.d(e,{default:function(){return c}});var t=r(3396);function u(n,e,r,u,s,i){return(0,t.wg)(),(0,t.iD)("div",null," system-config ")}var s={name:"system-config",setup(){return{}}},i=r(89);const a=(0,i.Z)(s,[["render",u]]);var c=a}}]);
+//# sourceMappingURL=360.728d1326.js.map
