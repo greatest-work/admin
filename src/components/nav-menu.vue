@@ -9,25 +9,18 @@
 </template>
 
 <script>
-// import {
-//   // IconApps,
-//   // IconBug,
-//   // IconBulb,
-//   // IconHome,
-// } from "@arco-design/web-vue/es/icon";
+
 import { useRouter } from 'vue-router';
 import { computed } from 'vue'
 import MenuItem from './menu-item.vue'
 
 export default {
   name: "nav-component",
+  
   components: {
-    // IconApps,
-    // IconBug,
-    // IconBulb,
     MenuItem,
-    // IconHome,
   },
+
   setup() {
     const $router = useRouter();
     // 路由
