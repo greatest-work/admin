@@ -1,7 +1,7 @@
 /**
  * 站点
  */
-const SiteDetails = () => import('@/views/site/detail');
+const SiteDetail = () => import('@/views/site/detail');
 const SiteList = () => import('@/views/site');
 
 /**
@@ -56,9 +56,9 @@ const routes = [
                 }
             },
             {
-                name: 'site-deatils',
-                path: 'deatils',
-                component: SiteDetails,
+                name: 'site-detail',
+                path: 'detail',
+                component: SiteDetail,
                 meta: {
                     title: '站点详情',
                 }
