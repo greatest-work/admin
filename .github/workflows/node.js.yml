@@ -1,4 +1,4 @@
-name: Deploy github-pages
+name: Build and Deploy to gh_page
 on: 
   push:
     branches:
@@ -16,7 +16,6 @@ jobs:
         run: |
           npm i
           npm run build
-
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
