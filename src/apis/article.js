@@ -1,7 +1,8 @@
 import request from '@/utils/request';
+import qs from 'qs';
 
 export default {
-    getArticlesList() {
-        return request.get(`/articles`)
+    getArticlesList(prarms) {
+        return request.get(`/articles?${qs.stringify(prarms)}`)
     }
 }
