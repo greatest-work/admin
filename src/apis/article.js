@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 export default {
-    getArticlesList() {
-        return request.get(`/articles`)
+    getArticlesList(params) {
+        return request.get(`/articles`, { params })
     }
 }
