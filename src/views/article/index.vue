@@ -20,7 +20,7 @@
 
 <script>
 import { reactive, ref, inject, onMounted } from "vue";
-import { columns } from "@/service/article/config"
+import { columns } from "@/service/article/config";
 
 export default {
   name: "article-list",
