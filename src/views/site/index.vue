@@ -1,6 +1,6 @@
 <template>
-  <a-space>
-    <a-button @click="visible = true" type="primary">
+  <a-space style="margin: 10px 0 10px 0;">
+    <a-button @click="openModel('add')" type="primary">
       <template #icon>
         <icon-plus />
       </template>
@@ -11,74 +11,154 @@
     :bordered="false"
     :loading="loading"
     :columns="columns"
-    :data="data"
+    :data="data.site"
   >
-    <template #tag="{ record }">
-      <a-space>
-        <a-tag v-for="item in record.tag" :key="item">{{item}}</a-tag>
-      </a-space>
+    <template #status="{ record }">
+        <template  v-if="record.status === 0">
+          <icon-refresh spin/> 编译中
+        </template>
+        <template v-else>
+          <icon-check-circle :style="{color: '#00b52b'}" /> 正常运行
+        </template>
+    </template>
+
+    <template #optional={record}>
+      <a-button type="text" @click="startBuildSite(record.id)">构建</a-button>
+      <a-button type="text" @click="editSite(record)">编辑</a-button>
+      <a-button type="text" @click="toDeleteSite(record.id)" status="danger">删除</a-button>
     </template>
   </a-table>
-  <a-modal v-model:visible="visible" @ok="submitForm" title="新增站点">
-    <a-form :model="form">
+  <a-modal v-model:visible="visible" @ok="submitForm" :title="modelTitle()">
+    <a-form :model="data.form">
       <a-form-item field="name" label="站点名称">
-        <a-input v-model="form.name" />
+        <a-input v-model="data.form.name" />
       </a-form-item>
-      <a-form-item field="name" label="网站地址">
-        <a-input v-model="form.url" />
+      <a-form-item 
+      :rules="[{ type: 'url' }]"
+       field="siteLink" label="网站地址">
+        <a-input v-model="data.form.siteLink" />
       </a-form-item>
-      <a-form-item field="dir" label="根目录地址">
-        <a-input v-model="form.dir" />
+      <a-form-item field="path" label="根目录地址">
+        <a-input v-model="data.form.path" />
       </a-form-item>
-      <a-form-item field="tag" label="站点标签">
+      <!-- <a-form-item field="tag" label="站点标签">
         <a-input-tag
-          v-model="form.tag"
+          v-model="data.form.tag"
           placeholder="Please Enter"
           allow-clear
         />
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item
         :rules="[{ type: 'email' }]"
         field="admin"
         label="管理员邮箱"
       >
-        <a-input v-model="form.admin" />
+        <a-input v-model="data.form.admin" />
       </a-form-item>
     </a-form>
   </a-modal>
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { reactive, ref, inject, onMounted } from "vue";
 import { columns } from "@/service/site/config";
+import { Modal } from '@arco-design/web-vue';
 
 export default {
   name: "site-list",
+
   setup() {
-    const loading = ref(true);
-    const visible = ref(false);
-    const data = reactive([
-      {
-        key: "1",
-        tag: ["1", "2"],
-        name: "Jane Doe",
-        salary: 23000,
-        address: "32 Park Road, London",
-        email: "jane.doe@example.com",
-      },
-    ]);
-    const form = reactive({ name: "", url: "", dir: "", tag: [], admin: "" });
-    setTimeout(() => (loading.value = false), 2000);
-    const submitForm = () => {
-      console.log(form);
+
+    const scroll = {
+      y: 400
     };
+    const { getSiteList, buildSite, deleteSite, updateSite, addSite } = inject("api");
+
+    const loading = ref(true);
+    const visible = ref(false)
+    const data = reactive({ 
+      site: [], 
+      pagination: { 
+        pageSize: 10, 
+        total: 0 
+      },
+      form: {
+        name: "",
+        siteLink: "",
+        path: "",
+        admin: ""
+      },
+      type: 'add'
+    });
+
+    onMounted(async () => {
+      await getList()
+    });
+    const isAdd = () => data.type === 'add';
+    const modelTitle = () => `${isAdd() ? '新增' : '编辑' }站点`
+
+    const submitForm = async () => {
+      isAdd() ? await addSite(data.form) : await updateSite(data.form);
+      await getList();
+    }
+    const getList = async (page = 1) => {
+      loading.value = true;
+      const prarms = {
+        pageSize: data.pagination.pageSize,
+        page
+      }
+      const { result, total } =  await getSiteList(prarms);
+      data.site = result;
+      data.pagination.total = total;
+      loading.value = false;
+    }
+
+    const startBuildSite = async id => {
+      await buildSite(id);
+      await getList()
+    }
+
+    const toDeleteSite = id => {
+      Modal.warning({
+        title: '温馨提示',
+        content: '确定删除这个站点吗？继续将无法找回',
+        'on-before-ok': async function (done) {
+          await deleteSite(id);
+          await getList();
+          done();
+        }
+      });
+    };
+    
+    const openModel = type => {
+      data.form = {
+        name: "test_yjh",
+        siteLink: "https://baidu.com",
+        path: "/www/wwwroot/test",
+        admin: ""
+      }
+      data.type = type
+      visible.value = true;
+    }
+
+    const editSite = row => {
+      openModel('edit');
+      data.form = { ...row };
+    }
+
     return {
       columns,
-      data,
       loading,
-      form,
+      data,
+      getList,
+      scroll,
       visible,
       submitForm,
+      startBuildSite,
+      toDeleteSite,
+      editSite,
+      modelTitle,
+      openModel
     };
   },
 };

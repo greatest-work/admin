@@ -82,11 +82,11 @@ instance.interceptors.request.use(
         return config;
     },
     error => Promise.error(error))
-
+const code = [200, 201, 204]
 // 响应拦截器
 instance.interceptors.response.use(
     // 请求成功
-    res => res.status === 200 ? Promise.resolve(res.data) : Promise.reject(res),
+    res => code.includes(res.status) ? Promise.resolve(res.data) : Promise.reject(res),
     // 请求失败
     error => {
         const { response } = error;

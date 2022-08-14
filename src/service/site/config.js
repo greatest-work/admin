@@ -1,28 +1,45 @@
 export const columns = [
     {
-        title: "Name",
+        title: "站点名称",
         dataIndex: "name",
         ellipsis: true,
         tooltip: true,
-      },
-      {
-        title: "Salary",
-        dataIndex: "salary",
-      },
-      {
-        title: "Address",
-        dataIndex: "address",
-        ellipsis: true,
-      },
-      {
-        title: "tag",
-        dataIndex: "tag",
-        slotName: "tag",
-        align: 'center'
-      },
-      {
-        title: "Email",
-        dataIndex: "email",
+    },
+    {
+        title: "站点地址",
+        dataIndex: "siteLink",
+        tooltip: true,
         ellipsis: true
-      },
+    },
+    {
+        title: "站点根路径",
+        dataIndex: "path",
+        tooltip: true,
+        ellipsis: true
+    },
+    {
+        title: "状态",
+        dataIndex: "status",
+        slotName: "status",
+        ellipsis: true,
+        align: 'center'
+    },
+    {
+        title: "创建时间",
+        dataIndex: "createTime",
+        tooltip: true,
+        ellipsis: true,
+    },
+    {
+        title: "更新时间",
+        dataIndex: "updateTime",
+        tooltip: true,
+        ellipsis: true
+    },
+    {
+        title: '操作',
+        width: 240,
+        slotName: 'optional',
+        align: 'center'
+    }
 ];
