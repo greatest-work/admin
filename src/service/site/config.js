@@ -18,6 +18,13 @@ export const columns = [
         ellipsis: true
     },
     {
+        title: "文章数量（篇）",
+        dataIndex: "articleTotal",
+        tooltip: true,
+        align: 'right',
+        ellipsis: true
+    },
+    {
         title: "状态",
         dataIndex: "status",
         slotName: "status",
