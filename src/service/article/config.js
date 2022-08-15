@@ -1,9 +1,23 @@
 export const columns = [
     {
-        title: "title",
+        title: "标题",
         dataIndex: "title",
         ellipsis: true,
         tooltip: true,
+    },
+    {
+        title: "是否发布",
+        width: 100,
+        align: 'center',
+        slotName: 'status',
+    },
+    {
+        title: "标签",
+        slotName: 'tag', 
+    },
+    {
+        title: "所属站点",
+        dataIndex: "siteInfo.name",
     },
     {
         title: "创建时间",
@@ -21,5 +35,5 @@ export const columns = [
         title: '操作',
         slotName: 'optional',
         align: 'center'
-      }
+    }
 ];

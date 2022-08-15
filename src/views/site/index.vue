@@ -1,82 +1,164 @@
 <template>
-  <a-table :bordered="false" :loading="loading" :columns="columns" :data="data" />
+  <a-space style="margin: 10px 0 10px 0;">
+    <a-button @click="openModel('add')" type="primary">
+      <template #icon>
+        <icon-plus />
+      </template>
+      新增站点
+    </a-button>
+  </a-space>
+  <a-table
+    :bordered="false"
+    :loading="loading"
+    :columns="columns"
+    :data="data.site"
+  >
+    <template #status="{ record }">
+        <template  v-if="record.status === 0">
+          <icon-refresh spin/> 编译中
+        </template>
+        <template v-else>
+          <icon-check-circle :style="{color: '#00b52b'}" /> 正常运行
+        </template>
+    </template>
+
+    <template #optional={record}>
+      <a-button type="text" @click="startBuildSite(record.id)">构建</a-button>
+      <a-button type="text" @click="editSite(record)">编辑</a-button>
+      <a-button type="text" @click="toDeleteSite(record.id)" status="danger">删除</a-button>
+    </template>
+  </a-table>
+  <a-modal v-model:visible="visible" @ok="submitForm" :title="modelTitle()">
+    <a-form :model="data.form">
+      <a-form-item field="name" label="站点名称">
+        <a-input v-model="data.form.name" />
+      </a-form-item>
+      <a-form-item 
+      :rules="[{ type: 'url' }]"
+       field="siteLink" label="网站地址">
+        <a-input v-model="data.form.siteLink" />
+      </a-form-item>
+      <a-form-item field="path" label="根目录地址">
+        <a-input v-model="data.form.path" />
+      </a-form-item>
+      <!-- <a-form-item field="tag" label="站点标签">
+        <a-input-tag
+          v-model="data.form.tag"
+          placeholder="Please Enter"
+          allow-clear
+        />
+      </a-form-item> -->
+      <a-form-item
+        :rules="[{ type: 'email' }]"
+        field="admin"
+        label="管理员邮箱"
+      >
+        <a-input v-model="data.form.admin" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { reactive, ref, inject, onMounted } from "vue";
+import { columns } from "@/service/site/config";
+import { Modal } from '@arco-design/web-vue';
 
 export default {
   name: "site-list",
+
   setup() {
-    const columns = [
-      {
-        title: "Name",
-        dataIndex: "name",
-        ellipsis: true,
-        tooltip: true,
-        width: 100,
+
+    const scroll = {
+      y: 400
+    };
+    const { getSiteList, buildSite, deleteSite, updateSite, addSite } = inject("api");
+
+    const loading = ref(true);
+    const visible = ref(false)
+    const data = reactive({ 
+      site: [], 
+      pagination: { 
+        pageSize: 10, 
+        total: 0 
       },
-      {
-        title: "Salary",
-        dataIndex: "salary",
+      form: {
+        name: "",
+        siteLink: "",
+        path: "",
+        admin: ""
       },
-      {
-        title: "Address",
-        dataIndex: "address",
-        ellipsis: true,
-        width: 150,
-      },
-      {
-        title: "Email",
-        dataIndex: "email",
-        ellipsis: true,
-        tooltip: { position: "left" },
-        width: 200,
-      },
-    ];
-    const loading = ref(true)
-    const data = reactive([
-      {
-        key: "1",
-        name: "Jane Doe",
-        salary: 23000,
-        address: "32 Park Road, London",
-        email: "jane.doe@example.com",
-      },
-      {
-        key: "2",
-        name: "Alisa Ross",
-        salary: 25000,
-        address: "35 Park Road, London",
-        email: "alisa.ross@example.com",
-      },
-      {
-        key: "3",
-        name: "Kevin Sandra",
-        salary: 22000,
-        address: "31 Park Road, London",
-        email: "kevin.sandra@example.com",
-      },
-      {
-        key: "4",
-        name: "Ed Hellen",
-        salary: 17000,
-        address: "42 Park Road, London",
-        email: "ed.hellen@example.com",
-      },
-      {
-        key: "5",
-        name: "William Smith",
-        salary: 27000,
-        address: "62 Park Road, London",
-        email: "william.smith@example.com",
-      },
-    ]);
-    setTimeout(() => loading.value = false, 2000)
+      type: 'add'
+    });
+
+    onMounted(async () => {
+      await getList()
+    });
+    const isAdd = () => data.type === 'add';
+    const modelTitle = () => `${isAdd() ? '新增' : '编辑' }站点`
+
+    const submitForm = async () => {
+      isAdd() ? await addSite(data.form) : await updateSite(data.form);
+      await getList();
+    }
+    const getList = async (page = 1) => {
+      loading.value = true;
+      const prarms = {
+        pageSize: data.pagination.pageSize,
+        page
+      }
+      const { result, total } =  await getSiteList(prarms);
+      data.site = result;
+      data.pagination.total = total;
+      loading.value = false;
+    }
+
+    const startBuildSite = async id => {
+      await buildSite(id);
+      await getList()
+    }
+
+    const toDeleteSite = id => {
+      Modal.warning({
+        title: '温馨提示',
+        content: '确定删除这个站点吗？继续将无法找回',
+        'on-before-ok': async function (done) {
+          await deleteSite(id);
+          await getList();
+          done();
+        }
+      });
+    };
+    
+    const openModel = type => {
+      data.form = {
+        name: "test_yjh",
+        siteLink: "https://baidu.com",
+        path: "/www/wwwroot/test",
+        admin: ""
+      }
+      data.type = type
+      visible.value = true;
+    }
+
+    const editSite = row => {
+      openModel('edit');
+      data.form = { ...row };
+    }
+
     return {
       columns,
+      loading,
       data,
-      loading
+      getList,
+      scroll,
+      visible,
+      submitForm,
+      startBuildSite,
+      toDeleteSite,
+      editSite,
+      modelTitle,
+      openModel
     };
   },
 };
