@@ -1,5 +1,5 @@
 <template>
-  <a-space style="margin: 10px 0 10px 0;">
+  <a-space style="margin: 10px 0;">
     <a-button @click="openModel('add')" type="primary">
       <template #icon>
         <icon-plus />
@@ -107,8 +107,8 @@ export default {
         pageSize: data.pagination.pageSize,
         page
       }
-      const { result, total } =  await getSiteList(prarms);
-      data.site = result;
+      const { items, total } =  await getSiteList(prarms);
+      data.site = items;
       data.pagination.total = total;
       loading.value = false;
     }
@@ -132,9 +132,9 @@ export default {
     
     const openModel = type => {
       data.form = {
-        name: "test_yjh",
-        siteLink: "https://baidu.com",
-        path: "/www/wwwroot/test",
+        name: "",
+        siteLink: "",
+        path: "",
         admin: ""
       }
       data.type = type
