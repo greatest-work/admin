@@ -20,12 +20,14 @@
       <p class="login-form-sub-title">Login Greatest Work admin</p>
       <a-space direction="vertical" size="large">
         <a-input
+          v-model="userForm.username"
           :style="{ width: '320px' }"
           placeholder="请输入账号"
           allow-clear
         />
         <a-input-password
-        long
+          long
+          v-model="userForm.password"
           :style="{ width: '320px' }"
           placeholder="请输入密码"
           allow-clear
@@ -41,21 +43,29 @@
 
 <script>
 import { useRouter } from "vue-router";
-import { ref } from "vue"
+import { ref, inject, reactive } from "vue"
 export default {
   name: "login-page",
   setup() {
+    const { userLogin } = inject("api");
     const router = useRouter();
+    const userForm = reactive({
+      username: "",
+      password: ""
+    })
     const loading = ref(false);
-    const handleLogin = () => {
-      loading.value = true
-      setTimeout(() => {
+    const handleLogin = async () => {
+      const { token } = await userLogin(userForm);
+      localStorage.setItem('token', token)
+      // loading.value = true
+      // setTimeout(() => {
         router.push("/")
-      }, 2000);
+      // }, 2000);
     }
     return {
       handleLogin,
-      loading
+      loading,
+      userForm
     }
   }
 };

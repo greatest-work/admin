@@ -1,7 +1,17 @@
 <template>
-  <a-range-picker
-    style="width: 254px; margin: 10px 0 10px 0;"
-  />
+
+    <a-space style="margin: 10px 0;">
+      <a-range-picker
+        style="width: 254px;"
+      />
+      <a-button @click="openModel('add')" type="primary">
+        <template #icon>
+          <icon-plus />
+        </template>
+        新增文章
+      </a-button>
+  </a-space>
+
   <a-table
     :scroll="scroll"
     :bordered="false"
@@ -98,8 +108,8 @@ export default {
         pageSize: data.pagination.pageSize,
         page
       }
-      const { result, total } =  await getArticlesList(prarms);
-      data.articles = result;
+      const { items, total } =  await getArticlesList(prarms);
+      data.articles = items;
       data.pagination.total = total;
       loading.value = false;
     }
@@ -111,13 +121,17 @@ export default {
     
     const eidtArticle = async row => {
       data.form = { ...row, tags: row.tags?.split(',') }
-      const { result } = await getSiteList() ?? [];
-      site.list = result;
+      const { items } = await getSiteList() ?? [];
+      site.list = items;
       visible.value = true;
     }
 
     const deleteArticle = async id => {
       console.log(id);
+    }
+    
+    const openModel = type => {
+      console.log(type);
     }
 
     return {
@@ -128,11 +142,12 @@ export default {
       scroll,
       site,
       siteFieldNames,
+      RELEASE_STATUS,
       getList,
       eidtArticle,
       deleteArticle,
       submitForm,
-      RELEASE_STATUS
+      openModel,
     };
   },
 };
