@@ -1,23 +1,33 @@
 <template>
   <a-layout v-if="!hidden" class="layout">
     <a-layout-sider hide-trigger collapsible :collapsed="collapsed">
-      <div class="logo" > </div>
+      <h1 class="logo" v-if="!collapsed"> GreatestWork </h1>
+      <h1 class="logo" v-if="collapsed"> 
+        <a href="/">
+          <img 
+            style="height: 100%;" 
+            src="https://user-images.githubusercontent.com/48596931/179389598-34f65f1c-ee84-4077-a119-f0e4aa43551c.png" 
+            alt="" 
+            srcset=""
+          > 
+        </a>
+      </h1>
       <NavMenu />
     </a-layout-sider>
     <a-layout>
-      <a-layout-header>
+      <a-layout-header class="layout__header">
         <a-button class="collapse_btn" shape="round" @click="onCollapse">
           <IconCaretRight v-if="collapsed" />
           <IconCaretLeft v-else />
         </a-button>
         <LayoutUser />
       </a-layout-header>
-      <a-layout style="padding: 0 24px">
-        <a-breadcrumb :style="{ margin: '16px 0' }">
+      <a-layout class="layout__main" style="padding: 0 24px">
+        <!-- <a-breadcrumb :style="{ margin: '16px 0' }"> -->
           <!-- <a-breadcrumb-item>Home</a-breadcrumb-item>
           <a-breadcrumb-item>List</a-breadcrumb-item>
           <a-breadcrumb-item>App</a-breadcrumb-item> -->
-        </a-breadcrumb>
+        <!-- </a-breadcrumb> -->
         <a-layout-content class="container">
           <router-view />
         </a-layout-content>
@@ -71,7 +81,6 @@ export default defineComponent({
 </script>
 <style scoped>
 .container {
-  padding: 10px;
   box-sizing: border-box;
 }
 .layout {
@@ -83,7 +92,11 @@ export default defineComponent({
 .layout :deep(.arco-layout-sider) .logo {
   height: 32px;
   margin: 12px 8px;
-  background: rgba(255, 255, 255, 0.2);
+  line-height: 32px;
+  text-align: center;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
 }
 .layout :deep(.arco-layout-sider-light) .logo {
   background: var(--color-fill-2);
@@ -120,4 +133,13 @@ export default defineComponent({
   align-items: center;
 }
 
+.layout__header {
+  /* position: fixed; */
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+.layout__main {
+  margin-top: 20px;
+}
 </style>

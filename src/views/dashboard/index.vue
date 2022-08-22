@@ -1,7 +1,7 @@
 <template>
   <div class="quick_operation">
     <div class="quick_operation-data">
-      <h3 class="quick_operation-title">快捷操作</h3>
+      <!-- <h3 class="quick_operation-title">快捷操作</h3>
       <a-row class="grid-demo" :gutter="[24, 12]">
         <a-col :span="12">
           <div class="quick_operation--detail">
@@ -19,15 +19,21 @@
         <a-col :span="12">
           <div>col - 6</div>
         </a-col>
-      </a-row>
+      </a-row> -->
       <!-- <a-divider style="border-bottom-width: 1px" /> -->
       <h3 class="quick_operation-title">操作日志</h3>
-      <a-list :bordered="false" :max-height="120" @reach-bottom="fetchData">
-        <template #scroll-loading>
+      <a-list :bordered="false">
+        <!-- <template #scroll-loading>
           <div v-if="bottom">No more data</div>
           <a-spin v-else />
-        </template>
-        <a-list-item v-for="item of data" :key="item">{{ item }}</a-list-item>
+        </template> -->
+        <a-list-item v-for="item of data.logList" :key="item">
+          {{ logType[item.sentence] }}
+          |
+          {{ item.ip }}
+          |
+          {{ item.time }}
+          </a-list-item>
       </a-list>
     </div>
     <div class="quick_operation-timeline">
@@ -43,43 +49,29 @@
             This is a descriptive message
           </a-typography-text>
         </a-timeline-item>
-        <a-timeline-item label="2018-05-12" lineType="dashed">
-          The second milestone
-          <br />
-          <a-typography-text
-            type="secondary"
-            :style="{ fontSize: '12px', marginTop: '4px' }"
-          >
-            This is a descriptive message
-          </a-typography-text>
-        </a-timeline-item>
-        <a-timeline-item label="2020-09-30" lineType="dashed">
-          The third milestone
-          <br />
-          <a-typography-text
-            type="secondary"
-            :style="{ fontSize: '12px', marginTop: '4px' }"
-          >
-            This is a descriptive message
-          </a-typography-text>
-        </a-timeline-item>
       </a-timeline>
     </div>
   </div>
   <div class="quick_charts"></div>
 </template>
 <script>
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted, inject } from 'vue';
+import { getLogType } from '@/service/log/config';
+import { DateType } from '@/utils/dateType';
+
 export default {
   name: "site-details",
 
 setup() {
+    const { getLogList } = inject("api");
     const current = ref(1);
     const bottom = ref(false);
-    const data = reactive([]);
+    const data = reactive({
+      logList: []
+    });
 
     const fetchData = () => {
-      console.log('reach bottom!');
+      // console.log('reach bottom!');
       if (current.value <= 5) {
         window.setTimeout(() => {
           const index = data.length;
@@ -96,12 +88,22 @@ setup() {
         bottom.value = true
       }
     }
-
+    onMounted(async () => {
+      const { items: logList } = await getLogList({limit: 10, offset: 1});
+      logList.map(items => {
+        const ips = items.ip.split(',');
+        const ipList = ips.filter(item => item !== '127.0.0.1')
+        items.ip = ipList.join();
+        items.time = DateType(items.time)
+      })
+      data.logList = logList
+    })
     return {
       current,
       bottom,
       data,
-      fetchData
+      fetchData,
+      logType: getLogType()
     }
 }
 }
@@ -117,7 +119,7 @@ setup() {
   flex: 1;
 }
 .quick_operation-data {
-  flex: 3;
+  flex: 1;
   padding: 0 10px 0 20px;
   box-sizing: border-box;
   /* background-color: skyblue; */

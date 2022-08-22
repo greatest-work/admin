@@ -1,41 +1,43 @@
 <template>
-  <a-space style="margin: 10px 0;">
-    <a-button @click="openModel('add')" type="primary">
-      <template #icon>
-        <icon-plus />
-      </template>
-      新增站点
-    </a-button>
-  </a-space>
-  <a-table
-    :bordered="false"
-    :loading="loading"
-    :columns="columns"
-    :data="data.site"
-  >
-    <template #status="{ record }">
-        <template  v-if="record.status === 0">
-          <icon-refresh spin/> 编译中
+  <div class="layout_main">
+    <a-space style="margin: 10px 0">
+      <a-button @click="openModel('add')" type="primary">
+        <template #icon>
+          <icon-plus />
+        </template>
+        新增站点
+      </a-button>
+    </a-space>
+    <a-table
+      :bordered="false"
+      :loading="loading"
+      :columns="columns"
+      :data="data.site"
+    >
+      <template #status="{ record }">
+        <template v-if="record.status === 0">
+          <icon-refresh spin /> 编译中
         </template>
         <template v-else>
-          <icon-check-circle :style="{color: '#00b52b'}" /> 正常运行
+          <icon-check-circle :style="{ color: '#00b52b' }" /> 正常运行
         </template>
-    </template>
+      </template>
 
-    <template #optional={record}>
-      <a-button type="text" @click="startBuildSite(record.id)">构建</a-button>
-      <a-button type="text" @click="editSite(record)">编辑</a-button>
-      <a-button type="text" @click="toDeleteSite(record.id)" status="danger">删除</a-button>
-    </template>
-  </a-table>
+      <template #optional="{ record }">
+        <a-button type="text" @click="startBuildSite(record.id)">构建</a-button>
+        <a-button type="text" @click="editSite(record)">编辑</a-button>
+        <a-button type="text" @click="toDeleteSite(record.id)" status="danger"
+          >删除</a-button
+        >
+      </template>
+    </a-table>
+  </div>
   <a-modal v-model:visible="visible" @ok="submitForm" :title="modelTitle()">
     <a-form :model="data.form">
       <a-form-item field="name" label="站点名称">
         <a-input v-model="data.form.name" />
       </a-form-item>
-      <a-form-item 
-      :rules="[{ type: 'url' }]"
-       field="siteLink" label="网站地址">
+      <a-form-item :rules="[{ type: 'url' }]" field="siteLink" label="网站地址">
         <a-input v-model="data.form.siteLink" />
       </a-form-item>
       <a-form-item field="path" label="根目录地址">
@@ -62,89 +64,94 @@
 <script>
 import { reactive, ref, inject, onMounted } from "vue";
 import { columns } from "@/service/site/config";
-import { Modal } from '@arco-design/web-vue';
+import { Modal } from "@arco-design/web-vue";
+import { DateType } from '@/utils/dateType';
 
 export default {
   name: "site-list",
 
   setup() {
-
     const scroll = {
-      y: 400
+      y: 400,
     };
-    const { getSiteList, buildSite, deleteSite, updateSite, addSite } = inject("api");
+    const { getSiteList, buildSite, deleteSite, updateSite, addSite } =
+      inject("api");
 
     const loading = ref(true);
-    const visible = ref(false)
-    const data = reactive({ 
-      site: [], 
-      pagination: { 
-        pageSize: 10, 
-        total: 0 
+    const visible = ref(false);
+    const data = reactive({
+      site: [],
+      pagination: {
+        pageSize: 10,
+        total: 0,
       },
       form: {
         name: "",
         siteLink: "",
         path: "",
-        admin: ""
+        admin: "",
       },
-      type: 'add'
+      type: "add",
     });
 
     onMounted(async () => {
-      await getList()
+      await getList();
     });
-    const isAdd = () => data.type === 'add';
-    const modelTitle = () => `${isAdd() ? '新增' : '编辑' }站点`
+    const isAdd = () => data.type === "add";
+    const modelTitle = () => `${isAdd() ? "新增" : "编辑"}站点`;
 
     const submitForm = async () => {
       isAdd() ? await addSite(data.form) : await updateSite(data.form);
       await getList();
-    }
+    };
     const getList = async (page = 1) => {
       loading.value = true;
       const prarms = {
         pageSize: data.pagination.pageSize,
-        page
-      }
-      const { items, total } =  await getSiteList(prarms);
+        page,
+      };
+      const { items, total } = await getSiteList(prarms);
+      items.forEach(item => {
+        item.createTime = DateType(item.createTime);
+        item.updateTime = DateType(item.updateTime);
+      })
       data.site = items;
       data.pagination.total = total;
       loading.value = false;
-    }
+    };
 
-    const startBuildSite = async id => {
+    const startBuildSite = async (id) => {
       await buildSite(id);
-      await getList()
-    }
+      await getList();
+    };
 
-    const toDeleteSite = id => {
+    const toDeleteSite = (id) => {
       Modal.warning({
-        title: '温馨提示',
-        content: '确定删除这个站点吗？继续将无法找回',
-        'on-before-ok': async function (done) {
+        title: "温馨提示",
+        content: "确定删除这个站点吗？继续将无法找回",
+        "on-before-ok": async function (done) {
           await deleteSite(id);
           await getList();
           done();
-        }
+        },
       });
     };
-    
-    const openModel = type => {
+
+    const openModel = (type) => {
       data.form = {
         name: "",
         siteLink: "",
         path: "",
-        admin: ""
-      }
-      data.type = type
+        admin: "",
+      };
+      data.type = type;
       visible.value = true;
-    }
+    };
 
-    const editSite = row => {
-      openModel('edit');
+    const editSite = (row) => {
+      openModel("edit");
       data.form = { ...row };
-    }
+    };
 
     return {
       columns,
@@ -158,8 +165,15 @@ export default {
       toDeleteSite,
       editSite,
       modelTitle,
-      openModel
+      openModel,
     };
   },
 };
 </script>
+
+<style scoped>
+.layout_main {
+  padding: 10px;
+  box-sizing: border-box;
+}
+</style>

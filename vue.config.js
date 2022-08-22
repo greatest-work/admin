@@ -8,6 +8,7 @@ function resolve(dir) {
 module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: '/admin',
+  productionSourceMap: false,
   devServer: {
     open: true,
     host: 'localhost',
