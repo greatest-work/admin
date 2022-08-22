@@ -1,7 +1,17 @@
 <template>
   <a-layout v-if="!hidden" class="layout">
     <a-layout-sider hide-trigger collapsible :collapsed="collapsed">
-      <div class="logo" > GreatestWork </div>
+      <h1 class="logo" v-if="!collapsed"> GreatestWork </h1>
+      <h1 class="logo" v-if="collapsed"> 
+        <a href="/">
+          <img 
+            style="height: 100%;" 
+            src="https://user-images.githubusercontent.com/48596931/179389598-34f65f1c-ee84-4077-a119-f0e4aa43551c.png" 
+            alt="" 
+            srcset=""
+          > 
+        </a>
+      </h1>
       <NavMenu />
     </a-layout-sider>
     <a-layout>
@@ -86,6 +96,7 @@ export default defineComponent({
   text-align: center;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   font-size: 18px;
+  font-weight: 500;
 }
 .layout :deep(.arco-layout-sider-light) .logo {
   background: var(--color-fill-2);

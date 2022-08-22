@@ -46,7 +46,7 @@ const errorHandle = (status, msg = '系统异常') => {
     // 状态码判断
     switch (status) {
         case 400:
-            toLogin();
+            // toLogin();
             break;
         // 401: 未登录状态，跳转登录页
         case 401:

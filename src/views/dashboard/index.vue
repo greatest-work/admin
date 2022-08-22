@@ -89,7 +89,7 @@ setup() {
       }
     }
     onMounted(async () => {
-      const { items: logList } = await getLogList();
+      const { items: logList } = await getLogList({limit: 10, offset: 1});
       logList.map(items => {
         const ips = items.ip.split(',');
         const ipList = ips.filter(item => item !== '127.0.0.1')
