@@ -11,7 +11,7 @@
 <script>
 
 import { useRouter } from 'vue-router';
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import MenuItem from './menu-item.vue'
 
 export default {
@@ -25,10 +25,16 @@ export default {
     const $router = useRouter();
     // 路由
     const routes = computed(() =>  $router?.options?.routes.filter(i => !i.meta?.hidden));
-    const openedMenu = computed(() => $router.currentRoute.value.path);
     const to = key => $router.push(key);
     const fullPath = computed(() => (route, sub) => route.path + '/' + sub.path);
 
+    const openedMenu = computed(() => $router.currentRoute.value.path);
+
+    onMounted(() => {
+      // setTimeout(() => {
+      //   console.log($router.currentRoute.value.fullPath);
+      // }, 2000)
+    })
     return {
       routes,
       openedMenu,

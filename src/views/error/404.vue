@@ -9,12 +9,14 @@
 </template>
 
 <script>
+import { useRouter } from "vue-router";
 export default {
   name: '404-page',
-
   setup() {
+    const $router = useRouter()
+    const backHome = () => $router.push('/');
     return {
-
+      backHome
     };
   }
 };

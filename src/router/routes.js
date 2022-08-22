@@ -13,6 +13,7 @@ const Dashboard = () => import('@/views/dashboard');
  * 文章管理
  */
 const ArticleList = () => import('@/views/article');
+const ArticleEdit = () => import('@/views/article/edit');
 
  /**
  * 系统设置
@@ -82,6 +83,16 @@ const routes = [
                     title: '文章数据',
                 }
             },
+            {
+                path: 'edit',
+                name: 'article-edit',
+                component: ArticleEdit,
+                meta: {
+                    title: '编辑文章',
+                    hiddenNav: true
+                }
+            },
+            
         ],
     },
     {
