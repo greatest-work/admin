@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunkgreatest_work"]=self["webpackChunkgreatest_work"]||[]).push([[157],{4157:function(e,t,r){r.r(t),r.d(t,{default:function(){return c}});var n=r(3396);function u(e,t,r,u,a,s){return(0,n.wg)(),(0,n.iD)("div",null," site-detail ")}var a={name:"site-detail",setup(){return{}}},s=r(89);const i=(0,s.Z)(a,[["render",u]]);var c=i}}]);
