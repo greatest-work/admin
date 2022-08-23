@@ -42,6 +42,7 @@ import {
 } from '@arco-design/web-vue/es/icon';
 
 export default {
+  name: 'system-theme',
   components: { IconThumbUp, IconShareInternal, IconMore },
 };
 </script>

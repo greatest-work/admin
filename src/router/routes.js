@@ -1,7 +1,7 @@
 /**
  * 站点
  */
-// const SiteDetail = () => import('@/views/site/detail');
+const SiteDetail = () => import('@/views/site/detail');
 const SiteList = () => import('@/views/site');
 
 /**
@@ -56,14 +56,15 @@ const routes = [
                     title: '站点列表',
                 }
             },
-            // {
-            //     name: 'site-detail',
-            //     path: 'detail',
-            //     component: SiteDetail,
-            //     meta: {
-            //         title: '站点详情',
-            //     }
-            // },
+            {
+                name: 'site-detail',
+                path: 'detail/:siteId',
+                component: SiteDetail,
+                meta: {
+                    title: '站点详情',
+                    hiddenNav: true
+                }
+            },
         ],
     },
     {
