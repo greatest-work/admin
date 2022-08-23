@@ -1,10 +1,25 @@
 <template>
   <a-form
+    :rules="rules"
     :model="form"
-    :style="{ width: '600px', 'margin-left': '60px', 'margin-top': '10px' }"
+    :style="{ width: '600px', 'margin-left': '40px' }"
     auto-label-width
     @submit="handleSubmit"
   >
+  <h4>邮箱 POP3/SMTP 授权</h4>
+    <a-form-item field="mailPassCode" label="授权码">
+      <a-input-password 
+          v-model="form.mailPassCode"
+          placeholder="请输入授权码"
+      />
+    </a-form-item>
+    <a-form-item field="sendMail" label="发送者">
+      <a-input
+          v-model="form.sendMail"
+          placeholder="请输入发送者邮箱"
+      />
+    </a-form-item>
+    <h4>邮箱推送设置</h4>
     <a-form-item field="loginTip" label="登录通知">
       <a-switch type="line" v-model="form.loginTip"/>
     </a-form-item>
@@ -25,28 +40,42 @@
 
 <script>
 import { reactive, onMounted, inject } from "vue";
+import { rules } from '@/service/system/config'
 export default {
   name: "notification-comp",
   setup() {
-    const { getSystemList } = inject("api");
+    const specialHandle = ['buildTip', 'loginTip']
+    const { getSystemList, updateSystem } = inject("api");
     const form = reactive({
       adminMail: "",
-      loginTip: 1,
-      buildTip: 1,
+      loginTip: true,
+      buildTip: true,
+      mailPassCode: '',
+      sendMail: ''
     });
 
-    const handleSubmit = (data) => {
-      console.log(data);
+    const handleSubmit = async ({values}) => {
+      const result = {}
+      Object.keys(values).forEach(key => {
+        if(specialHandle.includes(key)) result[key] = Number(values[key]) + ''
+        else result[key] = values[key]
+      })
+      await updateSystem(result)
     };
 
     onMounted( async() => {
         const { result } = await getSystemList();
         result.forEach(item => {
-            form[item?.name] = item.value
+            if(specialHandle.includes(item.name)) {
+              form[item?.name] = !!Number(item.value);
+            } else {
+              form[item?.name] = item.value;
+            }
         })
     })
     return {
       form,
+      rules: rules(),
       handleSubmit,
     };
   },

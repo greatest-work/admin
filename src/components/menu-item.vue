@@ -8,7 +8,7 @@
 
     {{ item.children === undefined ? item.meta.title : item.children[0].meta.title }}
   </a-menu-item>
-  <a-sub-menu v-else :key="fullPath">
+  <a-sub-menu v-else :key="fullPath + 'sub'">
     <template v-if="item.meta.icon" #icon>
       <component :is="item.meta.icon" />
     </template>
