@@ -1,0 +1,20 @@
+export default{
+    site: "站点",
+    siteName: "站点名称",
+    siteId: "站点 ID",
+    siteStatus: "运行状态",
+    siteTheme: "站点主题",
+    sitePath: "站点根路径",
+    siteLink: "站点链接",
+    siteLogo: "站点 Logo",
+    createTime: "创建时间",
+    updateTime: "更新时间",
+    articleTotal: "文章数量",
+    optional: "操作",
+    friendshipName: "友链名称",
+    friendshipDescText: "友链描述信息",
+    friendshipStatus: "友链状态",
+    friendshipLogo: "友链 Logo",
+    friendshipLink: "友链链接",
+}
+

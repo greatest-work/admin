@@ -1,46 +1,135 @@
+import t from '@/const/fieldName';
 export const columns = [
     {
-        title: "站点名称",
+        title: t.siteName,
         dataIndex: "name",
         slotName: "siteInfo",
         ellipsis: true,
     },
     {
-        title: "站点地址",
-        dataIndex: "siteLink",
-        slotName: "siteLink",
-        ellipsis: true
-    },
-    {
-        title: "文章数量（篇）",
-        dataIndex: "articleTotal",
-        tooltip: true,
-        align: 'center',
-        ellipsis: true
-    },
-    {
-        title: "状态",
+        title: t.siteStatus,
         dataIndex: "status",
         slotName: "status",
         ellipsis: true,
+        width: 180,
         align: 'center'
     },
     {
-        title: "创建时间",
+        title: t.siteLink,
+        dataIndex: "siteLink",
+        slotName: "siteLink",
+        width: 180,
+        ellipsis: true
+    },
+    {
+        title: t.articleTotal,
+        dataIndex: "articleTotal",
+        tooltip: true,
+        align: 'center',
+        width: 120,
+        ellipsis: true
+    },
+    {
+        title: t.createTime,
         dataIndex: "createTime",
         tooltip: true,
         ellipsis: true,
     },
     {
-        title: "更新时间",
+        title: t.updateTime,
         dataIndex: "updateTime",
         tooltip: true,
         ellipsis: true
     },
     {
-        title: '操作',
+        title: t.optional,
         width: 240,
         slotName: 'optional',
         align: 'center'
     }
 ];
+
+export const baseInfoConf = [
+    {
+        key: 'logo',
+        type: 'img',
+        label: t.siteLogo
+    },
+    {
+        key: 'name',
+        type: 'text',
+        label: t.siteName
+    },
+    {
+        key: 'articleTotal',
+        type: 'text',
+        label: t.articleTotal
+    },
+    {
+        key: 'status',
+        type: 'badge',
+        label: t.siteStatus
+    },
+    {
+        key: 'siteLink',
+        type: 'link',
+        label: t.siteLink
+    },
+    {
+        key: 'path',
+        type: 'text',
+        label: t.sitePath
+    },
+    {
+        key: 'id',
+        type: 'text',
+        label: t.siteId
+    },
+    {
+        key: 'createTime',
+        type: 'time',
+        label: t.createTime
+    },
+    {
+        key: 'updateTime',
+        type: 'time',
+        label: t.updateTime
+    },
+]
+
+export const friendshipColumns = () => {
+    return [
+        {
+            title: t.friendshipName,
+            dataIndex: "name",
+            tooltip: true,
+            ellipsis: true,
+        },
+        {
+            title: t.friendshipLogo,
+            slotName: "logo",
+            ellipsis: true,
+        },
+        {
+            title: t.friendshipStatus,
+            slotName: "status",
+            ellipsis: true,
+        },
+        {
+            title: t.friendshipLink,
+            dataIndex: "link",
+            ellipsis: true,
+        },
+        {
+            title: t.friendshipDescText,
+            dataIndex: "descText",
+            tooltip: true,
+            ellipsis: true,
+        },
+        {
+            title: t.optional,
+            align: 'center',
+            slotName: "optional",
+        },
+    ]
+}
