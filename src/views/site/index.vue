@@ -14,6 +14,16 @@
       :columns="columns"
       :data="data.site"
     >
+      <template #siteInfo="{ record }">
+        <a-link :href="'#/site/detail/'+record.id">
+        {{record.name}}
+        </a-link>
+      </template>
+      <template #siteLink="{ record }">
+        <a-link :href="record.siteLink" target="_blank">
+        {{record.siteLink}}
+        </a-link>
+      </template>
       <template #status="{ record }">
         <template v-if="record.status === 0">
           <icon-refresh spin /> 编译中
@@ -65,6 +75,7 @@
 import { reactive, ref, inject, onMounted } from "vue";
 import { columns } from "@/service/site/config";
 import { Modal } from "@arco-design/web-vue";
+import { useRouter } from "vue-router";
 import { DateType } from '@/utils/dateType';
 
 export default {
@@ -74,6 +85,7 @@ export default {
     const scroll = {
       y: 400,
     };
+    const $router = useRouter();
     const { getSiteList, buildSite, deleteSite, updateSite, addSite } =
       inject("api");
 
@@ -153,6 +165,13 @@ export default {
       data.form = { ...row };
     };
 
+    const getSiteInfo = id => {
+      console.log(id);
+      $router.push({
+        path: `/site/detail/${id}`
+      })
+    }
+
     return {
       columns,
       loading,
@@ -166,6 +185,7 @@ export default {
       editSite,
       modelTitle,
       openModel,
+      getSiteInfo
     };
   },
 };

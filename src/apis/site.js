@@ -13,6 +13,9 @@ export default {
     deleteSite(siteId) {
         return request.post(`/site/delete/${siteId}`)
     },
+    getSiteInfo(siteId) {
+        return request.get(`/site/info/${siteId}`)
+    },
     updateSite(data) {
         return request.put(`/site/update`, data)
     }
