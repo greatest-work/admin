@@ -11,7 +11,7 @@ export default {
         return request.post(`/reset_build/${siteId}`)
     },
     deleteSite(siteId) {
-        return request.post(`/site/delete/${siteId}`)
+        return request.delete(`/site/delete/${siteId}`)
     },
     getSiteInfo(siteId) {
         return request.get(`/site/info/${siteId}`)

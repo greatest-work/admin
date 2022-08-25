@@ -21,7 +21,7 @@
       @page-size-change="getList"
     >
       <template #status="{ record }">
-        {{ RELEASE_STATUS[record.status] }}
+        <a-badge :status="getArticleStatus(record.status).status" :text="getArticleStatus(record.status).label" />
       </template>
       <template #tag="{ record }">
         <!-- {{record.tags}} -->
@@ -44,7 +44,7 @@
 <script>
 import { reactive, ref, inject, onMounted } from "vue";
 import { columns } from "@/service/article/config";
-import { RELEASE_STATUS } from "@/const/common";
+import { getArticleStatus } from "@/const/common";
 import { useRouter } from "vue-router";
 import { DateType } from '@/utils/dateType';
 import { Modal } from '@arco-design/web-vue';
@@ -118,7 +118,7 @@ export default {
       data,
       scroll,
       site,
-      RELEASE_STATUS,
+      getArticleStatus,
       getList,
       deleteArticle,
       openModel,

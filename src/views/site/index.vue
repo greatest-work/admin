@@ -25,12 +25,10 @@
         </a-link>
       </template>
       <template #status="{ record }">
-        <template v-if="record.status === 0">
-          <icon-refresh spin /> 编译中
-        </template>
-        <template v-else>
-          <icon-check-circle :style="{ color: '#00b52b' }" /> 正常运行
-        </template>
+        <a-badge 
+            :status="getSiteStatus(record.status).status" 
+            :text="getSiteStatus(record.status).label" 
+        />
       </template>
 
       <template #optional="{ record }">
@@ -53,20 +51,6 @@
       <a-form-item field="path" label="根目录地址">
         <a-input v-model="data.form.path" />
       </a-form-item>
-      <!-- <a-form-item field="tag" label="站点标签">
-        <a-input-tag
-          v-model="data.form.tag"
-          placeholder="Please Enter"
-          allow-clear
-        />
-      </a-form-item> -->
-      <a-form-item
-        :rules="[{ type: 'email' }]"
-        field="admin"
-        label="管理员邮箱"
-      >
-        <a-input v-model="data.form.admin" />
-      </a-form-item>
     </a-form>
   </a-modal>
 </template>
@@ -77,6 +61,7 @@ import { columns } from "@/service/site/config";
 import { Modal } from "@arco-design/web-vue";
 import { useRouter } from "vue-router";
 import { DateType } from '@/utils/dateType';
+import { getSiteStatus } from '@/const/common';
 
 export default {
   name: "site-list",
@@ -166,7 +151,6 @@ export default {
     };
 
     const getSiteInfo = id => {
-      console.log(id);
       $router.push({
         path: `/site/detail/${id}`
       })
@@ -185,7 +169,8 @@ export default {
       editSite,
       modelTitle,
       openModel,
-      getSiteInfo
+      getSiteInfo,
+      getSiteStatus
     };
   },
 };
