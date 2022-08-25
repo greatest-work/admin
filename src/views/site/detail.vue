@@ -17,6 +17,9 @@
         </a-tab-pane>
         <a-tab-pane key="3" title="主题设置"> </a-tab-pane>
         <a-tab-pane key="4" title="订阅者信息"> </a-tab-pane>
+        <a-tab-pane key="5" title="构建记录"> 
+          <BuildRecord />
+        </a-tab-pane>
       </a-tabs>
     </a-page-header>
   </a-spin>
@@ -26,10 +29,11 @@ import { inject, reactive, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import BaseInfo from "./components/baseInfo";
 import Friendship from "./components/friendship";
+import BuildRecord from "./components/buildRecord.vue";
 
 export default {
   name: "site-detail",
-  components: { BaseInfo, Friendship },
+  components: { BaseInfo, Friendship, BuildRecord },
   setup() {
     const $router = useRouter();
     const { getSiteInfo } = inject("api");
