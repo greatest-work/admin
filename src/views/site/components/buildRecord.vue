@@ -1,5 +1,5 @@
 <template>
-  <a-collapse :default-active-key="[1]" destroy-on-hide accordion :bordered="false">
+  <a-collapse destroy-on-hide accordion :bordered="false">
     <a-collapse-item 
       v-for="item in buildList" 
       :header="item.siteInfo.name + item.startTime" :key="item.id">
