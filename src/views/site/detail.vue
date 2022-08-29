@@ -5,7 +5,7 @@
       title="站点详情"
       :subtitle="detail.baseInfo.name"
     >
-      <a-tabs style="min-width: 700px;" default-active-key="0" position="right" v-if="!loading">
+      <a-tabs style="min-width: 700px;" default-active-key="5" position="right" v-if="!loading">
         <a-tab-pane key="0" title="基本信息">
           <BaseInfo :detail="detail.baseInfo" />
         </a-tab-pane>
