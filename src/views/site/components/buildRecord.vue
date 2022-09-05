@@ -57,7 +57,11 @@ export default {
       loading.value = false;
     }
     const openSSE = () => {
-      const source = new EventSource(`/api/sse/test`);
+      const source = new EventSource(`/api/sse/test`, {
+        headers: {
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmZjdiNjI2Ni02YjNmLTQwYWItYWE0ZS0wOGE1YjFmOTIzMmMiLCJpYXQiOjE2NjIwNDU2MjEsImV4cCI6MTY2MjEzMjAyMX0.9Ozg0ag0G58H5A3wnWL-N3SpEp2RWCG_4myTtdQTTHM`
+        }
+      });
       source.onopen = (e) => {
         console.log(e);
       }
