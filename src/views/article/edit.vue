@@ -50,9 +50,9 @@
         </a-select>
       </a-form-item>
       <a-form-item>
-        <a-button html-type="submit" type="primary" long>{{
-          confirmText
-        }}</a-button>
+        <a-button html-type="submit" type="primary" long>
+          {{ confirmText }}
+        </a-button>
       </a-form-item>
     </a-form>
   </a-page-header>
@@ -62,7 +62,6 @@
 import { reactive, inject, onMounted, computed } from "vue";
 import { rules, fileName } from "@/service/article/config";
 import { useRouter } from "vue-router";
-import { Message } from "@arco-design/web-vue";
 
 export default {
   name: "article-edit",
@@ -86,10 +85,10 @@ export default {
     });
     const handleSubmit = async ({ errors, values }) => {
       if (errors) return;
-      isEdit.value ? await updateArticles(values) : await addArticle(values);
+      isEdit.value ? await updateArticles({...values, status: 0}) : await addArticle(values);
       back();
     };
-    console.log(Message);
+
     const back = () => {
       $router.push("/article/list");
     };
