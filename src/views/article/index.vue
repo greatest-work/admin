@@ -26,9 +26,20 @@
       <template #tag="{ record }">
         <!-- {{record.tags}} -->
         <a-space>
-          <a-tag v-for="tag in record.tags.split(',')" :key="tag">{{
-            tag
-          }}</a-tag>
+          <template v-for="(tag, index) in getColumusTags(record)" >
+            <a-tag v-if="index < maxTagNum" size="small" :key="tag">{{
+              tag
+            }}</a-tag>
+          </template>
+          <a-tag v-if="getColumusTags(record).length > maxTagNum" size="small">
+            <a-tooltip :content="getTagsTipContent(record)">
+              <span>
+                + {{
+                  getColumusTags(record).length - maxTagNum
+                }}
+              </span>
+            </a-tooltip>
+          </a-tag>
         </a-space>
       </template>
       <template #optional="{ record }">
@@ -64,7 +75,6 @@ export default {
         pageSize: 10,
         total: 0,
         "show-total": true,
-        // "show-page-size": true,
       },
     });
     
@@ -88,6 +98,17 @@ export default {
       data.pagination.total = total;
       loading.value = false;
     };
+
+    const maxTagNum = ref(2)
+
+    const getColumusTags = ({ tags }) => {
+      return tags?.split(',') ?? []
+    }
+
+    const getTagsTipContent = (record) => {
+      const tags = getColumusTags(record);
+      return tags?.splice(maxTagNum.value, tags?.length).join(',')
+    }
 
     const deleteArticle = async (id) => {
       Modal.warning({
@@ -122,6 +143,9 @@ export default {
       getList,
       deleteArticle,
       openModel,
+      maxTagNum,
+      getColumusTags,
+      getTagsTipContent
     };
   },
 };

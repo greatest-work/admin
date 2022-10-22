@@ -3,6 +3,7 @@ export const columns = [
     {
         title: t.siteName,
         dataIndex: "name",
+        width: 180,
         slotName: "siteInfo",
         ellipsis: true,
     },
