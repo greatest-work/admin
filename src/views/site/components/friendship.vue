@@ -103,7 +103,7 @@ export default {
     };
 
     const editFriendship = (row) => {
-      console.log(row);
+      data.form = row;
     };
 
     const openModel = (type) => {

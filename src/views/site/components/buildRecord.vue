@@ -62,8 +62,7 @@ export default {
           'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmZjdiNjI2Ni02YjNmLTQwYWItYWE0ZS0wOGE1YjFmOTIzMmMiLCJpYXQiOjE2NjIwNDU2MjEsImV4cCI6MTY2MjEzMjAyMX0.9Ozg0ag0G58H5A3wnWL-N3SpEp2RWCG_4myTtdQTTHM`
         }
       });
-      source.onopen = (e) => {
-        console.log(e);
+      source.onopen = () => {
       }
       source.onmessage = (e) => {
         if(e.data === "build") getBuildList()
